@@ -37,4 +37,14 @@ public class Veterinario {
     public void setEspecialidad(String especialidad) {
         this.especialidad = especialidad;
     }
+
+    @Override
+    public String toString() {
+        return "Veterinario{" +
+                "numColegiado='" + numColegiado + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", id=" + id +
+                ", especialidad='" + especialidad + '\'' +
+                '}';
+    }
 }

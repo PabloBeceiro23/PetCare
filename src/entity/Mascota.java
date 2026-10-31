@@ -2,7 +2,7 @@ package entity;
 
 public class Mascota {
     private int id;
-    private String chip;
+    private int chip;
     private String nombre;
     private String especie;
     private int edad;
@@ -17,11 +17,11 @@ public class Mascota {
         this.id = id;
     }
 
-    public String getChip() {
+    public int getChip() {
         return chip;
     }
 
-    public void setChip(String chip) {
+    public void setChip(int chip) {
         this.chip = chip;
     }
 
@@ -47,5 +47,16 @@ public class Mascota {
 
     public void setEdad(int edad) {
         this.edad = edad;
+    }
+
+    @Override
+    public String toString() {
+        return "Mascota{" +
+                "id=" + id +
+                ", chip=" + chip +
+                ", nombre='" + nombre + '\'' +
+                ", especie='" + especie + '\'' +
+                ", edad=" + edad +
+                '}';
     }
 }

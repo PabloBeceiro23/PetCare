@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class App {
 
-    static MascotaService mascotaService;
+    static MascotaService mascotaService = new MascotaService();
 static  Scanner teclado = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -51,8 +51,13 @@ static  Scanner teclado = new Scanner(System.in);
                     }while(opcionMenuMascotas==0);
 
                     if(opcionMenuMascotas==1){
-
                         altaMascota();
+                    } else if (opcionMenuMascotas == 2){
+                        buscarMascotaMicroChip();
+                    } else if(opcionMenuMascotas == 3){
+                        listarMascotas();
+                    } else if(opcionMenuMascotas == 4){
+                        modificarMascota();
                     }
 
                 } else if (opcionMenu == 2) {
@@ -66,6 +71,38 @@ static  Scanner teclado = new Scanner(System.in);
         }while (opcionMenu !=3);
 
 
+    }
+
+    private static void modificarMascota() {
+
+    }
+
+    private static void listarMascotas() {
+        Mascota mascota = new Mascota();
+
+        mascotaService.listarMascotas(mascota);
+    }
+
+    // se pide el chip a buscar y se pasa al service para que llame al dao
+    private static void buscarMascotaMicroChip() {
+        int nChip = 0;
+        Mascota mascota = new Mascota();
+
+
+       do {
+           try {
+               System.out.println("Introduce el numero del chip de la mascota");
+               nChip = teclado.nextInt();
+               teclado.nextLine();
+           } catch (InputMismatchException e) {
+               System.out.println("Introduce un valor valido");
+               teclado.nextLine();
+           }
+       }while (nChip == 0);
+
+       mascota.setChip(nChip);
+
+        mascotaService.consultarMascotaChip(mascota);
     }
 
     // pedimos los datos de la mascota y se lo pasamos al service para que haga las comprobaciones
@@ -84,6 +121,7 @@ static  Scanner teclado = new Scanner(System.in);
             try {
                 System.out.println("Introduce edad de la mascota en meses");
                 edadMascota = teclado.nextInt();
+                teclado.nextLine();
             } catch (Exception e) {
                 System.out.println("Introduce un valor valido");
                 teclado.nextLine();
@@ -101,4 +139,6 @@ static  Scanner teclado = new Scanner(System.in);
             System.out.println("Error al registrar la mascota");
         }
     }
+
+
 }
