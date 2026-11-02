@@ -4,7 +4,6 @@ import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import entity.Mascota;
 import util.ConexionDb4o;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -30,7 +29,7 @@ public class MascotaDAO {
         return true;
     }
 
-    private int calcularID( ObjectContainer bd) {
+    int calcularID(ObjectContainer bd) {
 
         ObjectSet<Mascota> todasMascotas = bd.queryByExample(new Mascota());
 
@@ -45,7 +44,8 @@ public class MascotaDAO {
     }
 
     // se calcula un numero aleatorio entre 1 y 10000 y se comprueba que no lo tenga ninguna mascota de la bd
-    private int calcularChip(ObjectContainer bd) {
+    public int calcularChip(ObjectContainer bd) {
+
         ObjectSet<Mascota> consulta = bd.queryByExample(new Mascota());
         ArrayList<Mascota> todasMascotas = new ArrayList<>(consulta);
 
@@ -112,6 +112,56 @@ public class MascotaDAO {
         bd.close();
 
         return listaMascotas;
+
+    }
+
+    // se crea una mascota vacia y se le asigna el id de la mascota que se quiere modificar. se busca esa mascota, si existe se apunta a la mascota
+    // de la base de datos, se modifican los datos y se hace store y commit
+    public boolean modificarMascota(Mascota mascota) {
+
+        conexionBD = new ConexionDb4o();
+        ObjectContainer bd= conexionBD.abrirConexion();
+
+        Mascota  mascotaPlantilla = new Mascota();
+        mascotaPlantilla.setId(mascota.getId());
+
+        ObjectSet<Mascota> consultaMascotaPorId = bd.queryByExample(mascotaPlantilla);
+
+        if(consultaMascotaPorId.hasNext()){
+            mascotaPlantilla = consultaMascotaPorId.next();
+
+            mascotaPlantilla.setNombre(mascota.getNombre());
+            mascotaPlantilla.setEdad(mascota.getEdad());
+
+            bd.store(mascotaPlantilla);
+            bd.commit();
+            bd.close();
+            return true;
+        } else {
+            bd.close();
+            return false;
+        }
+    }
+
+// se busca en la base de datos una mascota que tenga el mismo id que la que se pide al usuario. si existe se elimina
+    public boolean eliminarMascota(Mascota mascota) {
+        conexionBD = new ConexionDb4o();
+        ObjectContainer bd= conexionBD.abrirConexion();
+
+        ObjectSet<Mascota> consultaMascotaPorId = bd.queryByExample(mascota);
+
+        if(consultaMascotaPorId.hasNext()){
+            mascota = consultaMascotaPorId.next();
+
+            bd.delete(mascota);
+            bd.commit();
+            bd.close();
+            return true;
+        } else {
+            bd.close();
+            return false;
+        }
+
 
     }
 }

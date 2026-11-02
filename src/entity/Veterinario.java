@@ -1,9 +1,9 @@
 package entity;
 
 public class Veterinario {
+    private int id;
     private String numColegiado;
     private String nombre;
-    private int id;
     private String especialidad;
 
     public String getNumColegiado() {
@@ -41,9 +41,9 @@ public class Veterinario {
     @Override
     public String toString() {
         return "Veterinario{" +
-                "numColegiado='" + numColegiado + '\'' +
+                "id=" + id +
+                ", numColegiado='" + numColegiado + '\'' +
                 ", nombre='" + nombre + '\'' +
-                ", id=" + id +
                 ", especialidad='" + especialidad + '\'' +
                 '}';
     }

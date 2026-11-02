@@ -35,4 +35,25 @@ public class MascotaService {
             System.out.println(m);
         }
     }
+
+    // se llama al dao que devuelve un boolean si modifica con exito o no
+    public void modificarMascota(Mascota mascota) {
+        boolean estaModificado = mascotaDAO.modificarMascota(mascota);
+
+        if(estaModificado){
+            System.out.println("Mascota Modificada");
+        } else {
+            System.out.println("La mascota con el id "+ mascota.getId() + " no existe");
+        }
+    }
+
+    public void eliminarMascota(Mascota mascota) {
+        boolean estaEliminado = mascotaDAO.eliminarMascota(mascota);
+
+        if(estaEliminado){
+            System.out.println("Mascota Eliminada");
+        } else {
+            System.out.println("No existe una mascota con el id "+ mascota.getId());
+        }
+    }
 }
