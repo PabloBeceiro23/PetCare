@@ -2,7 +2,7 @@ package entity;
 
 public class Mascota {
     private int id;
-    private int chip;
+    private String chip;
     private String nombre;
     private String especie;
     private int edad;
@@ -17,11 +17,11 @@ public class Mascota {
         this.id = id;
     }
 
-    public int getChip() {
+    public String getChip() {
         return chip;
     }
 
-    public void setChip(int chip) {
+    public void setChip(String chip) {
         this.chip = chip;
     }
 

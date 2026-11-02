@@ -12,31 +12,38 @@ public class VeterinarioDAO {
     ConexionDb4o conexionBD;
 
 
-    // se calcula el id del veterinario reutilizando el metodo creado en mascotadao. se comprueba que no existe el numero de colegiado
-    // y si no existe se almacena en la base de datos
+    int calcularID(ObjectContainer bd) {
+
+        ObjectSet<Veterinario> todosVeterinarios = bd.queryByExample(new Veterinario());
+
+        int maxId = 0;
+
+        for (Veterinario p : todosVeterinarios) {
+            if (p.getId() > maxId) {
+                maxId = p.getId();
+            }
+        }
+        return maxId + 1;
+    }
+
+    // se busca si existe algun veterinario con el numero de colegiado introducido. si no existe se registra el veterinario
     public boolean registrarVeterinario(Veterinario veterinario) {
-
         conexionBD = new ConexionDb4o();
-
         ObjectContainer oc = conexionBD.abrirConexion();
 
-        MascotaDAO mascotaDAO = new MascotaDAO();
-        int idVeterinario = mascotaDAO.calcularID(oc);
-        veterinario.setId(idVeterinario);
-
-        // se crea un veterinario con el numero de colegiado introducido por el usuario para buscarlo en la base de datos a ver si existe
-        // si existe no se guarda el veterinario
         Veterinario veterinarioPlantilla = new Veterinario();
         veterinarioPlantilla.setNumColegiado(veterinario.getNumColegiado());
 
-        ObjectSet<Mascota> consultaVeterinario = oc.queryByExample(veterinarioPlantilla);
+        ObjectSet<Veterinario> consultaVeterinario = oc.queryByExample(veterinarioPlantilla);
 
-        if(consultaVeterinario.isEmpty()) {
+        if (consultaVeterinario.isEmpty()) {
+            veterinario.setId(calcularID(oc));
             oc.store(veterinario);
             oc.commit();
             oc.close();
             return true;
         } else {
+            oc.close();
             return false;
         }
     }

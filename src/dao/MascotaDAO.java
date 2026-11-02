@@ -5,28 +5,33 @@ import com.db4o.ObjectSet;
 import entity.Mascota;
 import util.ConexionDb4o;
 import java.util.ArrayList;
-import java.util.Random;
+
 
 public class MascotaDAO {
     ConexionDb4o conexionBD;
 
-    // se le asigna un id y un numero de chip valido
+    // se le asigna un id y se comprueba que el chip no exista
     public boolean registrarMascota(Mascota mascota) {
         conexionBD = new ConexionDb4o();
-
         ObjectContainer oc = conexionBD.abrirConexion();
 
-        int idMascota = calcularID(oc);
-        mascota.setId(idMascota);
 
-        int chipMascota = calcularChip(oc);
-        mascota.setChip(chipMascota);
+            Mascota plantilla = new Mascota();
+            plantilla.setChip(mascota.getChip());
 
-        oc.store(mascota);
-        oc.commit();
-        oc.close();
+            ObjectSet<Mascota> existente = oc.queryByExample(plantilla);
 
-        return true;
+            if (existente.hasNext()) {
+                oc.close();
+                return false;   // chip repetido
+            }
+
+            mascota.setId(calcularID(oc));
+            oc.store(mascota);
+            oc.commit();
+            oc.close();
+            return true;
+
     }
 
     int calcularID(ObjectContainer bd) {
@@ -43,33 +48,7 @@ public class MascotaDAO {
         return maxId + 1;
     }
 
-    // se calcula un numero aleatorio entre 1 y 10000 y se comprueba que no lo tenga ninguna mascota de la bd
-    public int calcularChip(ObjectContainer bd) {
 
-        ObjectSet<Mascota> consulta = bd.queryByExample(new Mascota());
-        ArrayList<Mascota> todasMascotas = new ArrayList<>(consulta);
-
-
-        Random random = new Random();
-        int numeroChipAleatorio = 0;
-        boolean chipCorrecto = true;
-
-
-
-        do {
-            chipCorrecto = true;
-            numeroChipAleatorio = random.nextInt(10000) + 1;
-
-            for (Mascota p : todasMascotas) {
-                if(p.getChip() == numeroChipAleatorio) {
-                    chipCorrecto = false;
-                    break;
-                }
-            }
-        } while (!chipCorrecto);
-
-        return numeroChipAleatorio;
-    }
 
     // busca mascotas en la base de datos que tengan los mismos campos que la mascota que se pasa como parametro.
     // La mascota que se pasa como parametro solo tiene rellenado el chip por lo que va a buscar por chip

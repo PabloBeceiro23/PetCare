@@ -10,6 +10,8 @@ import java.util.Scanner;
 
 public class App {
 
+    // PABLO BECEIRO FREIRE
+
     static MascotaService mascotaService = new MascotaService();
     static VeterinarioService veterinarioService = new VeterinarioService();
 
@@ -240,31 +242,29 @@ static  Scanner teclado = new Scanner(System.in);
 
     // se pide el chip a buscar y se pasa al service para que llame al dao
     private static void buscarMascotaMicroChip() {
-        int nChip = 0;
+        String chip = "";
         Mascota mascota = new Mascota();
 
 
-       do {
-           try {
-               System.out.println("Introduce el numero del chip de la mascota");
-               nChip = teclado.nextInt();
-               teclado.nextLine();
-           } catch (InputMismatchException e) {
-               System.out.println("Introduce un valor valido");
-               teclado.nextLine();
-           }
-       }while (nChip == 0);
+            System.out.println("Introduce el numero del chip de la mascota");
+            chip = teclado.nextLine().trim();
 
-       mascota.setChip(nChip);
+        mascota.setChip(chip);
 
         mascotaService.consultarMascotaChip(mascota);
     }
 
     // pedimos los datos de la mascota y se lo pasamos al service para que haga las comprobaciones
     private static void altaMascota(){
+        String chipMascota = "";
         String nombreMascota = "";
         String especieMascota = "";
         int edadMascota = 0;
+
+
+            System.out.println("Introduce el chip de la mascota");
+            chipMascota = teclado.nextLine().trim();
+
 
         System.out.println("Introduce nombre de la mascota");
         nombreMascota = teclado.nextLine();
@@ -284,6 +284,7 @@ static  Scanner teclado = new Scanner(System.in);
         } while (edadMascota == 0);
 
         Mascota mascota = new Mascota();
+        mascota.setChip(chipMascota);
         mascota.setNombre(nombreMascota);
         mascota.setEspecie(especieMascota);
         mascota.setEdad(edadMascota);
@@ -291,7 +292,7 @@ static  Scanner teclado = new Scanner(System.in);
         if(mascotaService.registrarMascota(mascota)){
             System.out.println("Mascota registrada correctamente");
         } else {
-            System.out.println("Error al registrar la mascota");
+            System.out.println("Ya existe una mascota con el chip " + chipMascota);
         }
     }
 
