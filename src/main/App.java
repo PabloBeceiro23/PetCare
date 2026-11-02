@@ -289,11 +289,6 @@ static  Scanner teclado = new Scanner(System.in);
         mascota.setEspecie(especieMascota);
         mascota.setEdad(edadMascota);
 
-        if(mascotaService.registrarMascota(mascota)){
-            System.out.println("Mascota registrada correctamente");
-        } else {
-            System.out.println("Ya existe una mascota con el chip " + chipMascota);
-        }
     }
 
 

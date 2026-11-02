@@ -48,43 +48,32 @@ public class VeterinarioDAO {
         }
     }
 
-    // se busca un veterinario por numero de colegiado. si existe se printa
-    public void buscarVeterinarioNumColegiado(Veterinario veterinario) {
+    // se busca un veterinario por numero de colegiado. si existe se devuelve
+    public Veterinario buscarVeterinarioNumColegiado(Veterinario veterinario) {
         conexionBD = new ConexionDb4o();
-
         ObjectContainer oc = conexionBD.abrirConexion();
 
         ObjectSet<Veterinario> consultaVeterinario = oc.queryByExample(veterinario);
 
-        if(consultaVeterinario.hasNext()){
-            Veterinario veterinarioPlantilla = new Veterinario();
-            veterinarioPlantilla = consultaVeterinario.next();
-            System.out.println(veterinarioPlantilla);
-            oc.close();
-        } else {
-            System.out.println("Veterinario no encontrado");
-            oc.close();
+        Veterinario encontrado = null;
+        if (consultaVeterinario.hasNext()) {
+           encontrado = consultaVeterinario.next();
         }
 
+        oc.close();
+        return encontrado;
     }
 
-    public void listarVeterinarios() {
-        Veterinario veterinario =  new Veterinario();
-
-        conexionBD = new  ConexionDb4o();
+    // devuelve la lista de veterinarios, vacio si no hay ninguno
+    public ArrayList<Veterinario> listarVeterinarios() {
+        conexionBD = new ConexionDb4o();
         ObjectContainer oc = conexionBD.abrirConexion();
-        ObjectSet<Veterinario>  consultaVeterinario = oc.queryByExample(veterinario);
+
+        ObjectSet<Veterinario> consultaVeterinario = oc.queryByExample(new Veterinario());
         ArrayList<Veterinario> listaVeterinarios = new ArrayList<>(consultaVeterinario);
 
-        if(consultaVeterinario.isEmpty()) {
-            System.out.println("No hay veterinarios registrados en la base de datos");
-            oc.close();
-        } else {
-            for(Veterinario v: listaVeterinarios){
-                System.out.println(v);
-            }
-            oc.close();
-        }
+        oc.close();
+        return listaVeterinarios;
     }
 
     // se busca un veterinario con el id que introdujo el usuario y se modifica la especialidad

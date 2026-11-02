@@ -8,10 +8,20 @@ import java.util.ArrayList;
 public class MascotaService {
     MascotaDAO mascotaDAO = new MascotaDAO();
 
-    public boolean registrarMascota(Mascota mascota) {
-//        mascotaDAO = new MascotaDAO();
+    // se comprueba que no se intruduzca edad negativa
+    public void registrarMascota(Mascota mascota) {
+        if (mascota.getEdad() < 0) {
+            System.out.println("La edad no puede ser negativa");
+            return;
+        }
 
-        return mascotaDAO.registrarMascota(mascota);
+        boolean estaRegistrado = mascotaDAO.registrarMascota(mascota);
+
+        if (estaRegistrado) {
+            System.out.println("Mascota registrada correctamente");
+        } else {
+            System.out.println("Ya existe una mascota con el chip " + mascota.getChip());
+        }
     }
 
     public void consultarMascotaChip(Mascota mascota){
@@ -38,12 +48,17 @@ public class MascotaService {
 
     // se llama al dao que devuelve un boolean si modifica con exito o no
     public void modificarMascota(Mascota mascota) {
+        if (mascota.getEdad() < 0) {
+            System.out.println("La edad no puede ser negativa");
+            return;
+        }
+
         boolean estaModificado = mascotaDAO.modificarMascota(mascota);
 
-        if(estaModificado){
+        if (estaModificado) {
             System.out.println("Mascota Modificada");
         } else {
-            System.out.println("La mascota con el id "+ mascota.getId() + " no existe");
+            System.out.println("La mascota con el id " + mascota.getId() + " no existe");
         }
     }
 
